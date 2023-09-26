@@ -1,0 +1,18 @@
+﻿@page "/settings"
+
+<TheTitle Title="Site Settings" Description="AdjustmentRule the settings of the website" Icon="@CustomIcons.Cog" />
+<MudPaper Elevation="25" Class="pa-8">
+    @if (_loaded)
+    {
+        <MudGrid>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText>Below is your registration key and download link.</MudText>
+            </MudItem>
+        </MudGrid>
+    
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+</MudPaper>

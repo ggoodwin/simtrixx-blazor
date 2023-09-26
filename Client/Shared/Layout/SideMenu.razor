@@ -1,0 +1,109 @@
+﻿@using System.Security.Claims
+
+<UserCard />
+
+<MudNavMenu Style="padding-top: 5px">
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">Home</MudNavLink>
+    <MudListSubheader Class="mt-2 mb-n2">Account</MudListSubheader>
+    <AuthorizeView>
+        <Authorized>
+            <MudNavLink Href="/account" Icon="@Icons.Material.Outlined.AccountCircle">
+                Profile
+            </MudNavLink>
+            <MudNavLink Href="/billing" Icon="@Icons.Material.Outlined.Receipt">
+                Billing
+            </MudNavLink>
+        </Authorized>
+        <NotAuthorized>
+            <MudNavLink Href="/login" Icon="@Icons.Material.Outlined.Login">
+                Login
+            </MudNavLink>
+            <MudNavLink Href="/register" Icon="@Icons.Material.Outlined.AppRegistration">
+                Register
+            </MudNavLink>
+        </NotAuthorized>
+    </AuthorizeView>
+    <MudNavLink Href="/license" Icon="@Icons.Material.Outlined.PermIdentity">Licenses</MudNavLink>
+    
+    <MudListSubheader Class="mt-2 mb-n2">Help</MudListSubheader>
+    <MudNavLink Href="/support" Icon="@Icons.Material.Outlined.Support">Support Tickets</MudNavLink>
+    <MudNavLink Href="/privacy" Icon="@Icons.Material.Outlined.PrivacyTip">Privacy Policy</MudNavLink>
+    <MudNavLink Href="/terms" Icon="@Icons.Material.Outlined.MiscellaneousServices">Terms of Use</MudNavLink>
+
+    @if (_canViewUsers || _canViewRoles || _canViewLicenses || _canViewDemoRequests || _canViewSupportDash || _canViewContactRequests)
+    {
+        <MudListSubheader Class="mt-2 mb-n2">Administrative</MudListSubheader>
+        @if (_canViewAuditTrails)
+        {
+            <MudNavLink Href="/audit-trails" Icon="@Icons.Material.Outlined.DataExploration">
+                Audit Trails
+            </MudNavLink>
+        }
+        @if (_canViewLicenses)
+        {
+            <MudNavLink Href="/admin/licenses" Icon="@Icons.Material.Outlined.CardMembership">License Management</MudNavLink>
+        }
+        <MudNavGroup Title="Users" Icon="@Icons.Filled.VerifiedUser" Expanded="false">
+            @if (_canViewUsers)
+            {
+                <MudNavLink Href="/admin/identity/users" Icon="@Icons.Material.Outlined.Person">
+                    Users
+                </MudNavLink>
+            }
+            @if (_canViewRoles)
+            {
+                <MudNavLink Href="/admin/identity/roles" Icon="@Icons.Material.Outlined.Route">Roles</MudNavLink>
+            }
+        </MudNavGroup>
+        @if (_canViewDemoRequests || _canViewContactRequests)
+        {
+            <MudNavGroup Title="Communication" Icon="@Icons.Filled.ContactMail" Expanded="false">
+                @if (_canViewContactRequests)
+                {
+                    <MudNavLink Href="/admin/contactrequests" Icon="@Icons.Material.Outlined.Email">Contact Requests</MudNavLink>
+                }
+                @if (_canViewDemoRequests)
+                {
+                    <MudNavLink Href="/admin/demos" Icon="@Icons.Material.Outlined.RequestPage">Demo Requests</MudNavLink>
+                }
+            </MudNavGroup>
+        }
+        @if (_canViewSupportDash)
+        {
+            <MudNavGroup Title="Support" Icon="@Icons.Filled.Support" Expanded="false">
+                <MudNavLink Href="/admin/support" Icon="@Icons.Material.Outlined.SupportAgent">Support Dash</MudNavLink>
+                @if (_canViewDepartments)
+                {
+                    <MudNavLink Href="/admin/departments" Icon="@Icons.Material.Outlined.DepartureBoard">Departments</MudNavLink>
+                }
+            </MudNavGroup>
+        }
+    }
+</MudNavMenu>
+
+@code {
+    private ClaimsPrincipal? _authenticationStateProviderUser;
+
+    private bool _canViewAuditTrails;
+    private bool _canViewRoles;
+    private bool _canViewUsers;
+    private bool _canViewLicenses;
+    private bool _canViewDemoRequests;
+    private bool _canViewSupportDash;
+    private bool _canViewContactRequests;
+    private bool _canViewDepartments;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _authenticationStateProviderUser = await _stateProvider.GetAuthenticationStateProviderUserAsync();
+        
+        _canViewAuditTrails = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.AuditTrails.View)).Succeeded;
+        _canViewRoles = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Roles.View)).Succeeded;
+        _canViewUsers = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Users.View)).Succeeded;
+        _canViewLicenses = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Licenses.ViewAll)).Succeeded;
+        _canViewDemoRequests = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.DemoRequests.View)).Succeeded;
+        _canViewSupportDash = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.SupportTickets.ViewAll)).Succeeded;
+        _canViewContactRequests = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.ContactRequests.View)).Succeeded;
+        _canViewDepartments = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Departments.Add)).Succeeded;
+    }
+}

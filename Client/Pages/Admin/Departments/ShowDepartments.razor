@@ -1,0 +1,77 @@
+﻿@page "/admin/departments"
+@using Application.Features.Departments.Queries.GetAll
+@attribute [Authorize(Policy = Permissions.Departments.View)]
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<TheTitle Title="Departments" Description="Viewing All Departments" Icon="@CustomIcons.Department" ViewBox="0 0 800 700" />
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="false" Dense="true" Bordered="true" Striped="true" Elevation="25" Items="_departments" Filter="new Func<GetAllDepartmentsResponse, bool>(Search)" @bind-license="_department" CustomHeader="true">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">Create</MudButton>
+                <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetDataAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary" Style="margin-left: 5px;">Reload</MudButton>
+            </div>
+            <MudSpacer />
+            @if (_canSearchDepartments)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="Search for Departments" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+            }
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTHeadRow IgnoreCheckbox="true">
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllDepartmentsResponse, object>(x => x.Id)">Id</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllDepartmentsResponse, object>(x => x.Name)">Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllDepartmentsResponse, object>(x => x.Description)">Description</MudTableSortLabel></MudTh>
+                <MudTh Style="text-align: right">Actions</MudTh>
+            </MudTHeadRow>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Name">
+                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Description">
+                <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Actions" Style="text-align: right">
+                @if (_canEditDepartments || _canDeleteDepartments)
+                {
+                    <MudMenu Label="Actions" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                        @if (_canEditDepartments)
+                        {
+                            <MudMenuItem @onclick="@(() => InvokeModal(@context.Id))">Edit</MudMenuItem>
+                        }
+                        @if (_canDeleteDepartments)
+                        {
+                            <MudMenuItem @onclick="@(() => Delete(@context.Id))">Delete</MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled"
+                               DisableElevation="true"
+                               StartIcon="@Icons.Material.Filled.DoNotTouch"
+                               IconColor="Color.Secondary"
+                               Size="Size.Small"
+                               Color="Color.Surface">
+                        No Allowed Actions
+                    </MudButton>
+                }
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+}

@@ -1,0 +1,55 @@
+﻿@page "/simple"
+
+<!-- Buy Now -->
+    <div class="py-6 bg-white">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 mx-auto">
+            <h1 class="h2 text-center">Simple Matrix</h1>
+            <p class="lead text-center mb-4">Real time RFP document processing, take control of your capability matrices.</p>
+            
+            @*<div class="row justify-content-center mt-5 mb-4">
+              <div class="col-auto">
+                <nav class="nav btn-group">
+                  <a href="#monthly" class="btn btn-outline-primary active" data-toggle="tab">Monthly billing</a>
+                  <a href="#annual" class="btn btn-outline-primary" data-toggle="tab">Annual billing</a>
+                </nav>
+              </div>
+            </div>*@
+
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="yearly">
+                <div class="row py-4 equal-height-cards">
+                  <div class="col-md-8 mb-3 mb-md-0">
+                      <img src="/img/simtrixx3.png" alt="Simtrixx" class="img-fluid mb-4 shadow-md" />
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card text-center">
+                      <div class="card-body d-flex flex-column">
+                        <div class="mb-4">
+                          <h5>Introductory Offer:</h5>
+                          <span class="display-4">$699.99</span>
+                          <span>/yr</span>
+                        </div>
+                        <h6>Includes:</h6>
+                        <ul class="list-unstyled">
+                          <li class="mb-2">
+                            1 Year of use and support
+                          </li>
+                          <li class="mb-2">
+                            Regular updates and improvements
+                          </li>
+                        </ul>
+                          <div class="mt-auto">
+                              <MudButton Href="/purchase" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">Purchase License</MudButton>
+                          </div>
+                      </div>
+                    </div><!-- /.card -->
+                  </div>
+                </div><!-- /.row -->
+              </div><!-- /.tab-pane -->
+            </div>
+          </div>
+        </div><!-- /.row -->
+      </div>
+    </div>

@@ -1,0 +1,45 @@
+﻿<MudPaper Elevation="25" Class="pa-8 mt-9">
+    <MudGrid>
+        <MudItem xs="12" sm="3" md="3">
+            <MudText Typo="Typo.h6">Documentation</MudText>
+            <MudDivider/>
+            <MudList Clickable="true">
+                <MudListItem Text="Privacy Policy" Href="privacy"/>
+                <MudListItem Text="Terms of Use" Href="/terms"/>
+            </MudList>
+        </MudItem>
+        <MudItem xs="12" sm="3" md="3">
+            <MudText Typo="Typo.h6">Software</MudText>
+            <MudDivider/>
+            <MudList Clickable="true">
+                <MudListItem Text="Simple Matrix" Href="/simple"/>
+            </MudList>
+        </MudItem>
+        <MudItem xs="12" sm="3" md="3">
+            <MudText Typo="Typo.h6">Account</MudText>
+            <MudDivider/>
+            <MudList Clickable="true">
+                <AuthorizeView>
+                    <Authorized>
+                        <MudListItem Text="Account" Href="/account"/>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudListItem Text="Login" Href="/login"/>
+                        <MudListItem Text="Register" Href="/register"/>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </MudList>
+        </MudItem>
+        <MudItem xs="12" sm="3" md="3">
+            <MudText Typo="Typo.h6">Contact Us</MudText>
+            <MudDivider/>
+            <MudList Clickable="true">
+                <MudListItem Text="Request a Demo" Href="/demo"/>
+                <MudListItem Text="Support" Href="/contact"/>
+            </MudList>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.caption">&copy; 2022 - <a href="/">SimTrixx</a>.</MudText>
+        </MudItem>
+    </MudGrid>
+</MudPaper>

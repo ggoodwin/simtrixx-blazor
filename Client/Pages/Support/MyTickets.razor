@@ -1,0 +1,111 @@
+﻿@page "/support"
+@using Application.Features.SupportTickets.Queries.GetAll
+@using Application.Extensions
+@using Domain.Enums
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<TheTitle Title="Support Tickets" Description="Viewing All Support Tickets" Icon="@CustomIcons.Support" ViewBox="0 0 900 900" />
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="false" Dense="true" Bordered="true" Striped="true" Elevation="25" Items="_supportTickets" Filter="new Func<GetAllSupportTicketsResponse, bool>(Search)" @bind-license="_supportTicket" CustomHeader="true">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">Create Ticket</MudButton>
+                <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetDataAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary" Style="margin-left: 5px;">Reload</MudButton>
+            </div>
+            <MudSpacer />
+            @if (_canSearchSupportTickets)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="Search for Support Tickets" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+            }
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTHeadRow IgnoreCheckbox="true">
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllSupportTicketsResponse, object>(x => x.Id)">Id</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllSupportTicketsResponse, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllSupportTicketsResponse, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllSupportTicketsResponse, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllSupportTicketsResponse, object>(x => x.DepartmentName)">Department</MudTableSortLabel></MudTh>
+                <MudTh Style="text-align: right">Actions</MudTh>
+            </MudTHeadRow>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Subject">
+                <MudHighlighter Text="@context.Subject" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Status">
+                @if (context.Status == SupportStatus.Open)
+                {
+                    <MudChip Color="Color.Success">@context.Status.ToDescriptionString()</MudChip>
+                } else
+                {
+                    <MudChip Color="Color.Info">@context.Status.ToDescriptionString()</MudChip>
+                }
+            </MudTd>
+            <MudTd DataLabel="Priority">
+                <MudHighlighter Text="@context.Priority.ToDescriptionString()" HighlightedText="@_searchString"/>
+            </MudTd>
+            <MudTd DataLabel="DepartmentName">
+                <MudHighlighter Text="@context.DepartmentName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Actions" Style="text-align: right">
+                <MudButton Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" OnClick="@(ShowBtnPress)">@((ShowDetails == true)? "Hide" : "Show") Ticket Details</MudButton>
+                @if (_canEditSupportTickets || _canDeleteSupportTickets)
+                {
+                    <MudMenu Label="Actions" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                        @if (_canEditSupportTickets)
+                        {
+                            <MudMenuItem @onclick="@(() => InvokeModal(@context.Id))">Edit</MudMenuItem>
+                        }
+                        @if (_canDeleteSupportTickets)
+                        {
+                            <MudMenuItem @onclick="@(() => Delete(@context.Id))">Delete</MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled"
+                               DisableElevation="true"
+                               StartIcon="@Icons.Material.Filled.DoNotTouch"
+                               IconColor="Color.Secondary"
+                               Size="Size.Small"
+                               Color="Color.Surface">
+                        No Allowed Actions
+                    </MudButton>
+                }
+            </MudTd>
+        </RowTemplate>
+        <ChildRowContent>
+            @if (ShowDetails)
+                {
+                <MudTr>
+                    <td colspan="5">
+                        <MudCard Elevation="25">
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudAlert Severity="Severity.Info" Typo="Typo.body1">Details for Support Ticket : <strong>@context.Subject</strong></MudAlert>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText>@context.Description</MudText>
+                            </MudCardContent>
+                        </MudCard>
+                    </td>
+                </MudTr>}
+        </ChildRowContent>
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+}

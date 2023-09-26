@@ -1,0 +1,56 @@
+﻿<EditForm Model="@AddEditLicenseModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @{
+                if (AddEditLicenseModel.Id == 0)
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                        Add License
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                        Update License
+                    </MudText>
+                }
+            }
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                @if (AddEditLicenseModel.Id != 0)
+                {
+                    <MudItem xs="12" md="6">
+                        <MudTextField Disabled For="@(() => AddEditLicenseModel.Id)" @bind-Value="AddEditLicenseModel.Id" Label="Id" />
+                    </MudItem>
+                }
+                <MudItem xs="12" md="11">
+                    <MudTextField Disabled T="string" For="@(() => AddEditLicenseModel.Key)" @bind-Value="AddEditLicenseModel.Key" Label="Key" />
+                </MudItem>
+                <MudItem xs="12" md="1">
+                    <MudTooltip Text="Copy Key to Clipboard"><MudIconButton Icon="@Icons.Material.Filled.ContentCopy" OnClick="CopyToClipboard" /></MudTooltip>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudDatePicker For="@(() => AddEditLicenseModel.Expiration)" Label="Expiration Date" Editable="true" @bind-Date="AddEditLicenseModel.Expiration" Placeholder="Expiration Date" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudAutocomplete T="string" Label="User" For="@(() => AddEditLicenseModel.SimtrixxUserId)" @bind-Value="AddEditLicenseModel.SimtrixxUserId" ResetValueOnEmptyText="true" SearchFunc="@SearchUsers" Variant="Variant.Filled" ToStringFunc="@(i => _users.FirstOrDefault(b => b.Id == i)?.UserName ?? string.Empty)" OffsetY="true" />
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Cancel</MudButton>
+            @if (AddEditLicenseModel.Id != 0)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@_disabled" Color="Color.Secondary">Update</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@_disabled" Color="Color.Success">Save</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

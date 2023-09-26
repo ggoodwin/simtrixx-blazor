@@ -1,0 +1,14 @@
+﻿@page "/billing"
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 70vh;">
+    <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
+        @if (!_loaded)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            <MudAlert Severity="@Sev">@Message</MudAlert>
+        }
+    </MudPaper>
+</MudContainer>

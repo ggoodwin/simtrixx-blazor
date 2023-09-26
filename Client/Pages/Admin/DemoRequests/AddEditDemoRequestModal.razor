@@ -1,0 +1,56 @@
+﻿<EditForm Model="@AddEditDemoRequestModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @{
+                if (AddEditDemoRequestModel.Id == 0)
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                        Add Demo Request
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                        Update Demo Request
+                    </MudText>
+                }
+            }
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                @if (AddEditDemoRequestModel.Id != 0)
+                {
+                    <MudItem xs="12" md="6">
+                        <MudTextField Disabled For="@(() => AddEditDemoRequestModel.Id)" @bind-Value="AddEditDemoRequestModel.Id" Label="Id" />
+                    </MudItem>
+                }
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditDemoRequestModel.Name)" @bind-Value="AddEditDemoRequestModel.Name" Label="Name" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditDemoRequestModel.Email)" @bind-Value="AddEditDemoRequestModel.Email" Label="Email" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditDemoRequestModel.Notes)" @bind-Value="AddEditDemoRequestModel.Notes" Label="Notes" Lines="3" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudCheckBox For="@(() => AddEditDemoRequestModel.Contacted)" @bind-Value="AddEditDemoRequestModel.Contacted" Label="Contacted?" />
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Cancel</MudButton>
+            @if (AddEditDemoRequestModel.Id != 0)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@_disabled" Color="Color.Secondary">Update</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@_disabled" Color="Color.Success">Save</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

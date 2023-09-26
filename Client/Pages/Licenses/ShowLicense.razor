@@ -1,0 +1,31 @@
+﻿@page "/license"
+@using Application.Features.Licenses.Queries.GetByUser
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<TheTitle Title="Licenses" Description="Viewing My Licenses" Icon="@CustomIcons.License" ViewBox="0 0 900 800" />
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="false" Dense="true" Bordered="true" Striped="true" Elevation="25" Items="_licenses" Filter="new Func<GetLicensesByUserResponse, bool>(Search)" @bind-license="_license" CustomHeader="true">
+        <HeaderContent>
+            <MudTHeadRow IgnoreCheckbox="true">
+                <MudTh>License Key</MudTh>
+                <MudTh>Expiration Date</MudTh>
+            </MudTHeadRow>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Key">@context.Key</MudTd>
+            <MudTd DataLabel="Expiration">@context.Expiration</MudTd>
+        </RowTemplate>
+    </MudTable>
+    <br/><br/>
+    <MudButton Href="/purchase" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large">Purchase License</MudButton>
+    }

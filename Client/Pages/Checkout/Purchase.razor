@@ -1,0 +1,43 @@
+﻿@page "/purchase"
+@using Client.Infrastructure.Managers.Stripe
+
+@attribute [Authorize]
+
+@if(!_loaded) 
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+} else {
+    <MudAlert Severity="@_sev" Variant="Variant.Filled">@_msg</MudAlert>
+}
+
+@code {
+    private bool _loaded;
+    private Severity _sev;
+    private string? _msg;
+
+    [Inject] private IStripeManager? StripeManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUrlAsync();
+        _loaded = true;
+    }
+
+    private async Task GetUrlAsync()
+    {
+        var response = await StripeManager?.CreateCheckoutSessionAsync()!;
+        if (!string.IsNullOrEmpty(response))
+        {
+            _msg = "Redirecting to Checkout";
+            _sev = Severity.Success;
+            _snackBar.Add("Redirecting to Checkout", Severity.Success);
+            _navigationManager.NavigateTo(response);
+        }
+        else
+        {
+            _msg = "Error Occurred While Creating Session";
+            _sev = Severity.Error;
+            _snackBar.Add("Error Occurred While Creating Session", Severity.Error);
+        }
+    }
+}

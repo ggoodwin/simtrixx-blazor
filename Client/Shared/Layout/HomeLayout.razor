@@ -1,0 +1,58 @@
+﻿@inherits LayoutComponentBase
+
+<MudLayout>
+    <div class="intro py-10 bg-primary position-relative text-white">
+            <div class="bg-overlay-primary">
+                <img src="img/photos/8.jpg" class="img-fluid img-cover" alt="SimTrixx" />
+            </div>
+            <div class="intro-content mt-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 align-self-center">
+                            <h1 class="display-4 mb-3">Simple Solutions to<br />Complex RFPs</h1>
+                            <p class="lead mb-4">A Winning Proposal is a Team Effort. Use SimTrixx's software to identify Your Gaps and help identify the Right Teammate that helps deliver a Compelling Proposal.</p>
+                        </div><!-- /.col-md-6 -->
+                        <div class="col-md-5 ml-auto">
+                            <div class="card">
+                                <div class="card-body text-dark">
+                                    <AuthorizeView Context="Workaround">
+                                        <Authorized>
+                                            <MudAlert Severity="Severity.Success">Welcome Back @UserName</MudAlert>
+                                            <MudButton Href="/purchase" Class="btn btn-success btn-block btn-lg mb-2">Purchase Simple Matrix</MudButton>
+                                        </Authorized>
+                                        <NotAuthorized>
+                                            <EditForm Model="@_registerUserModel" OnValidSubmit="SubmitAsync">
+                                                <div class="form-group">
+                                                    <MudTextField For="@(() => _registerUserModel.FirstName)" @bind-Value="_registerUserModel.FirstName" Label="First Name" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <MudTextField For="@(() => _registerUserModel.LastName)" @bind-Value="_registerUserModel.LastName" Label="Last Name" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <MudTextField T="string" InputType="InputType.Email" Label="E-mail" @bind-Value="_registerUserModel.Email" For="@(() => _registerUserModel.Email)" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Email" />
+                                                </div>
+                                                <MudButton ButtonType="ButtonType.Submit" Class="btn btn-success btn-block btn-lg mb-2">Purchase Simple Matrix</MudButton>
+                                                <div class="text-center">
+                                                    Already have an account? <MudLink Href="/login">Sign in</MudLink>
+                                                </div>
+                                            </EditForm>
+                                        </NotAuthorized>
+                                    </AuthorizeView>
+                                </div>
+                            </div>
+                        </div><!-- /.col-md-6 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    <MainBody>
+        @Body
+    </MainBody>
+</MudLayout>
+<MudScrollToTop>
+    <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+</MudScrollToTop>
+
+<MudThemeProvider Theme="_currentTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>

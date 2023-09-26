@@ -1,0 +1,17 @@
+﻿@page "/verify/{UserId}/{Code}"
+@layout MainLayout
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 25vh;">
+    <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
+        <MudGrid>
+            <MudItem xs="12">
+                <TheTitle Title="Verified" Description="Your Account has been verified" Icon="@CustomIcons.Verified" ViewBox="0 0 800 500" />
+            </MudItem>
+            <MudItem xs="12">
+                <div class="d-flex justify-center">
+                    <MudLink Href="/login">Click Here To Login</MudLink>
+                </div>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudContainer>

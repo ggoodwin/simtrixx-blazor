@@ -1,0 +1,90 @@
+﻿<MudAppBar Style="@_menuBackground" Elevation="@_menuElevation">
+    <!-- Logo and Title -->
+    <MudImage Src="/img/logo.png" Style="height: 40px; margin-right: 10px;"/>
+    <MudText Typo="Typo.h6"><a href="/" style="color: white; text-underline: none;">Simtrixx</a></MudText>
+    
+    <AuthorizeView>
+        <NotAuthorized></NotAuthorized>
+        <Authorized>
+            <MudToolBar DisableGutters="true">
+                <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" Class="ml-3" />
+            </MudToolBar>
+        </Authorized>
+    </AuthorizeView>
+
+    <MudSpacer />
+
+    <!-- Software -->
+    <MudLink Href="/simple" Color="Color.Inherit" Class="nav-link text-white">Simple Matrix Software</MudLink>
+
+    <!-- Support -->
+    <MudLink Href="/contact" Color="Color.Inherit" Class="nav-link text-white">Contact</MudLink>
+
+    <!-- Demo -->
+    <NavLink class="btn btn-outline-white" href="/demo">Request Demonstration</NavLink>
+    
+    <!-- Settings -->
+    <AuthorizeView>
+        <NotAuthorized>
+        </NotAuthorized>
+        <Authorized>
+            <MudMenu Icon="@Icons.Filled.Settings" Color="Color.Inherit" Dense="true" Direction="Direction.Right" OffsetY="true">
+                @*<MudListItem Icon="@Icons.Material.Outlined.Brightness4" OnClick="@((e) => ToggleDarkMode())">Dark/Light Mode</MudListItem>*@
+                <MudListItem Icon="@Icons.Material.Outlined.AccountCircle" Href="/account">Profile Settings</MudListItem>
+                <MudListItem Icon="@Icons.Material.Outlined.AccountBalance" Href="/billing">Billing Settings</MudListItem>
+                @*<MudListItem Icon="@Icons.Material.Outlined.Web" Href="/settings">Site Settings</MudListItem>*@
+            </MudMenu>
+        </Authorized>
+    </AuthorizeView>
+    
+    <!-- User -->
+    <AuthorizeView>
+        <NotAuthorized>
+            <MudMenu Icon="@Icons.Filled.AccountCircle" Color="Color.Inherit" Dense="true" Direction="Direction.Right" OffsetY="true">
+                <MudListItem Text="Login" Href="/login" />
+                <MudListItem Text="Register" Href="/register" />
+            </MudMenu>
+        </NotAuthorized>
+        <Authorized>
+            <MudMenu OffsetX="true" Dense="true" Class="mt-1 ml-4">
+                <ActivatorContent>
+                    @if (string.IsNullOrEmpty(ImageDataUrl))
+                    {
+                        <MudAvatar Color="Color.Secondary">@FirstLetterOfName</MudAvatar>
+                    }
+                    else
+                    {
+                        <MudAvatar Image="@ImageDataUrl" Style="height: 50px; width: 50px;"> </MudAvatar>
+                    }
+                </ActivatorContent>
+                <ChildContent>
+                    <UserCard Class="mt-n2"/>
+                    <MudDivider Class="mb-2"/>
+                    <MudListItem Text="Profile" Href="/account" Icon="@Icons.Material.Outlined.Person"/>
+                    <MudListItem Text="License Keys" Href="/license" Icon="@Icons.Material.Outlined.Key" />
+                    <MudListItem Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick="Logout"/>
+                </ChildContent>
+            </MudMenu>
+        </Authorized>
+    </AuthorizeView>
+</MudAppBar>
+
+<AuthorizeView>
+    <Authorized>
+        <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Always">
+            <SideMenu />
+        </MudDrawer>
+    </Authorized>
+    <NotAuthorized>
+        
+    </NotAuthorized>
+</AuthorizeView>
+
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
+        @*<CascadingValue Value="_hubConnection">*@
+        @ChildContent
+        @*</CascadingValue>*@
+        @*<Footer></Footer>*@
+    </MudContainer>
+</MudMainContent>

@@ -1,0 +1,36 @@
+﻿@page "/demo"
+
+@if (_loaded)
+{
+    <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 30vh;">
+        <MudPaper Elevation="25" Class="pa-8">
+            <EditForm Model="@_demoRequestModel" OnValidSubmit="SubmitAsync">
+                <FluentValidationValidator @ref="_fluentValidationValidator"/>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <TheTitle Title="Request Demo" Description="Enter your details to setup a meeting" Icon="@CustomIcons.Demos"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="6">
+                        <MudTextField Disabled="@_fieldDisabled" For="@(() => _demoRequestModel.Name)" @bind-Value="_demoRequestModel.Name" Label="Name" Variant="Variant.Outlined" InputType="InputType.Text" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Rounded.Person"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="6">
+                        <MudTextField Disabled="@_fieldDisabled" For="@(() => _demoRequestModel.Email)" @bind-Value="_demoRequestModel.Email" Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Rounded.Email"/>
+                    </MudItem>
+                    <MudItem xs="12" Class="d-flex justify-center">
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Disabled="@_disabled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">Request Demo</MudButton>
+                    </MudItem>
+                    @if (_disabled)
+                    {
+                        <MudItem xs="12" Class="d-flex justify-center">
+                            <MudAlert Severity="Severity.Success" Variant="Variant.Filled">Demo Request Received we will be in touch soon!</MudAlert>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </EditForm>
+        </MudPaper>
+    </MudContainer>
+}
+else
+{
+    <Loading/>
+}

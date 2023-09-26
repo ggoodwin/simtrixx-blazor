@@ -1,0 +1,14 @@
+﻿@page "/cancelled"
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 25vh;">
+    <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
+        <MudGrid>
+            <MudItem xs="12">
+                <TheTitle Title="Cancelled" Description="You cancelled your transaction" Icon="@CustomIcons.Cancelled" />
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudLink Class="btn btn-success btn-block btn-lg mb-2 text-white" Href="/purchase">Try Again</MudLink>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudContainer>

@@ -1,0 +1,102 @@
+﻿@page "/admin/licenses"
+@using Application.Features.Licenses.Queries.GetAll
+@attribute [Authorize(Policy = Permissions.Licenses.View)]
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<TheTitle Title="Licenses" Description="Viewing All Licenses" Icon="@CustomIcons.License" ViewBox="0 0 900 800" />
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="false" Dense="true" Bordered="true" Striped="true" Elevation="25" Items="_licenses" Filter="new Func<GetAllLicensesResponse, bool>(Search)" @bind-license="_license" CustomHeader="true">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                @if (_canCreateLicenses)
+                {
+                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">Create</MudButton>
+                }
+                @if (_canExportLicenses)
+                {
+                    <MudButton DisableElevation IconColor="Color.Secondary" Variant="Variant.Filled" OnClick="ExportToExcelAsync" StartIcon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Surface">Export To Excel</MudButton>
+                }
+                @if (_canImportLicenses)
+                {
+                    <MudButton DisableElevation IconColor="Color.Secondary" Variant="Variant.Filled" OnClick="ImportFromExcelAsync" StartIcon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Surface">Import From Excel</MudButton>
+                }
+                <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetDataAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary" Style="margin-left: 5px;">Reload</MudButton>
+            </div>
+            <MudSpacer />
+            @if (_canSearchLicenses)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="Search for Licenses" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+            }
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTHeadRow IgnoreCheckbox="true">
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.Id)">Id</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.Key)">License Key</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.Expiration)">Expiration Date</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.FirstName)">First Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.LastName)">Last Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.UserName)">UserName</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<GetAllLicensesResponse, object>(x => x.Email)">Email</MudTableSortLabel></MudTh>
+                <MudTh Style="text-align: right">Actions</MudTh>
+            </MudTHeadRow>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Key">
+                <MudHighlighter Text="@context.Key" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Expiration">@context.Expiration</MudTd>
+            <MudTd DataLabel="User.FirstName">
+                <MudHighlighter Text="@context.FirstName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="User.LastName">
+                <MudHighlighter Text="@context.LastName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="User.UserName">
+                <MudHighlighter Text="@context.UserName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="User.Email">
+                <MudHighlighter Text="@context.Email" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Actions" Style="text-align: right">
+                @if (_canEditLicenses || _canDeleteLicenses)
+                {
+                    <MudMenu Label="Actions" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                        @if (_canEditLicenses)
+                        {
+                            <MudMenuItem @onclick="@(() => InvokeModal(@context.Id))">Edit</MudMenuItem>
+                        }
+                        @if (_canDeleteLicenses)
+                        {
+                            <MudMenuItem @onclick="@(() => Delete(@context.Id))">Delete</MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled"
+                               DisableElevation="true"
+                               StartIcon="@Icons.Material.Filled.DoNotTouch"
+                               IconColor="Color.Secondary"
+                               Size="Size.Small"
+                               Color="Color.Surface">
+                        No Allowed Actions
+                    </MudButton>
+                }
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+}

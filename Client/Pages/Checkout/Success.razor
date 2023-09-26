@@ -1,0 +1,37 @@
+﻿@page "/success/{TheId}"
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 70vh;">
+    <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
+@if (_loaded)
+{
+        <MudGrid>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudIcon Icon="@CustomIcons.Shield" Color="Color.Inherit" ViewBox="0 0 550 500" Size="Size.Large" Style="width:100px; height:100px;"/>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText Class="card-title" Typo="Typo.h5">Subscription Success</MudText>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText>Thank you!</MudText>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText>Below is your registration key and download link.</MudText>
+            </MudItem>
+            <MudItem xs="12" md="11" Class="d-flex justify-center">
+                <MudText Class="font-weight-bold">@_license</MudText>
+            </MudItem>
+            <MudItem xs="12" md="1" Class="d-flex justify-center">
+                <MudTooltip Text="Copy Key to Clipboard"><MudIconButton Icon="@Icons.Material.Filled.ContentCopy" OnClick="CopyToClipboard" /></MudTooltip>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudLink Class="btn btn-success btn-block btn-lg mb-2 text-white" Href="https://simtrixx.blob.core.windows.net/install/SimTrixxSetup.exe" Target="_blank">Download Here</MudLink>
+            </MudItem>
+        </MudGrid>
+        
+}
+else
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+    </MudPaper>
+</MudContainer>
